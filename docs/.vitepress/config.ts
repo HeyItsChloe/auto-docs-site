@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'auto-docs-site',
   description: 'Auto-generated codebase overview and changelog, kept live by GitHub Actions.',
+  base: '/auto-docs-site/',
   cleanUrls: true,
   themeConfig: {
     nav: [
