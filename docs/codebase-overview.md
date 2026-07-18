@@ -1,6 +1,6 @@
 # Codebase Overview
 
-_Generated 2026-07-18T02:19:41.362Z · engine: `deterministic` · commit `953fa01`_
+_Generated 2026-07-18T02:05:27.478Z · engine: `deterministic` · commit `953fa01`_
 
 ## File tree
 
@@ -44,7 +44,7 @@ _Generated 2026-07-18T02:19:41.362Z · engine: `deterministic` · commit `953fa0
     ├── .last-sha.json (56B)
     ├── generate-changelog.mjs (2.5KB)
     ├── generate-overview.mjs (2.3KB)
-    ├── generate-site.mjs (19.8KB)
+    ├── generate-site.mjs (12.1KB)
     └── lib/
         ├── claude.mjs (1.3KB)
         ├── git-log.mjs (650B)
