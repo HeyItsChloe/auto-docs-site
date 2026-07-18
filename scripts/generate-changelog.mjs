@@ -27,8 +27,10 @@ async function run() {
   const entry = `## ${date} — ${commits.length} commit${commits.length === 1 ? '' : 's'} (\`${sha.slice(0, 7)}\`)\n\n_engine: \`${engine}\`_\n\n${entryBody}\n`
 
   const existing = existsSync(outPath) ? readFileSync(outPath, 'utf8') : HEADING
-  const rest = existing.startsWith(HEADING) ? existing.slice(HEADING.length) : existing
-  writeFileSync(outPath, `${HEADING}\n${entry}\n${rest.trim()}\n`)
+  const afterHeading = existing.startsWith(HEADING) ? existing.slice(HEADING.length).trim() : existing.trim()
+  // Only carry forward real prior entries — discard first-run placeholder copy.
+  const rest = afterHeading.startsWith('##') ? afterHeading : ''
+  writeFileSync(outPath, `${HEADING}\n${entry}\n${rest}\n`.replace(/\n{3,}/g, '\n\n'))
   writeFileSync(statePath, JSON.stringify({ sha }, null, 2) + '\n')
 
   console.log(`Wrote ${outPath} (engine=${engine}, ${commits.length} new commits)`)

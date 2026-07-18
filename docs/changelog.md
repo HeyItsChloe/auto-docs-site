@@ -1,15 +1,8 @@
 # Changelog
 
-*Not generated yet.* This page is rewritten automatically by
-[`scripts/generate-changelog.mjs`](https://github.com/HeyItsChloe/auto-docs-site/blob/main/scripts/generate-changelog.mjs),
-appending a new dated entry each run and tracking the last-summarized commit in
-`scripts/.last-sha.json` so re-runs never duplicate history.
+## 2026-07-18 — 1 commit (`d94e73f`)
 
-Run it locally to generate it now:
+_engine: `deterministic`_
 
-```sh
-npm install
-npm run generate:changelog -- --engine=deterministic
-# or, with ANTHROPIC_API_KEY set:
-npm run generate:changelog -- --engine=llm
-```
+- Scaffold auto-docs-site: VitePress site + generation scripts + workflow (Claude, 2026-07-18, `d94e73f`)
+
