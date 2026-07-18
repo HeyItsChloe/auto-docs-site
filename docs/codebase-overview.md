@@ -1,6 +1,6 @@
 # Codebase Overview
 
-_Generated 2026-07-18T00:22:12.998Z · engine: `deterministic` · commit `d94e73f`_
+_Generated 2026-07-18T00:24:44.820Z · engine: `deterministic` · commit `88aa36f`_
 
 ## File tree
 
@@ -16,13 +16,14 @@ _Generated 2026-07-18T00:22:12.998Z · engine: `deterministic` · commit `d94e73
 │   │   └── theme/
 │   │       ├── custom.css (868B)
 │   │       └── index.ts (94B)
-│   ├── changelog.md (528B)
-│   ├── codebase-overview.md (536B)
+│   ├── changelog.md (187B)
+│   ├── codebase-overview.md (1.1KB)
 │   └── index.md (1.6KB)
 ├── package-lock.json (86.0KB)
 ├── package.json (404B)
 └── scripts/
-    ├── generate-changelog.mjs (2.3KB)
+    ├── .last-sha.json (56B)
+    ├── generate-changelog.mjs (2.5KB)
     ├── generate-overview.mjs (2.3KB)
     └── lib/
         ├── claude.mjs (1.3KB)
