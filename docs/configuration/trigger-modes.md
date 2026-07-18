@@ -1,5 +1,23 @@
 # Trigger Modes
 
+The workflow (`.github/workflows/docs-site.yml`) defines both triggers — `push` to `main` and a weekly `schedule` — but only one is actually "live" at a time, controlled by a repo variable so you never have to edit the YAML to switch:
+
+| Repo variable | Value | Behavior |
+| --- | --- | --- |
+| `DOCS_TRIGGER_MODE` | `on-merge` | Regenerates on every push to `main`. The scheduled run is a no-op. |
+| `DOCS_TRIGGER_MODE` | `weekly` | Regenerates on the Monday 9am UTC schedule. Pushes to `main` are a no-op. |
+| unset | — | Neither automatic trigger fires. Manual `workflow_dispatch` runs still work. |
+
+Set it under **Settings → Secrets and variables → Actions → Variables**.
+
+## Source Files
+
+
+### `docs/configuration/trigger-modes.md`
+
+```md
+# Trigger Modes
+
 The workflow (`.github/workflows/docs-site.yml`) defines both triggers — `push` to `main` and a
 weekly `schedule` — but only one is actually "live" at a time, controlled by a repo variable so
 you never have to edit the YAML to switch:
@@ -85,45 +103,6 @@ For the engine specifically, the resolution order is: `workflow_dispatch` input 
 The workflow registers two automatic triggers — a `push` event and a weekly `schedule` — but only one fires at a time, controlled by a repo variable. You switch behavior without editing any YAML.
 
 ## The three modes
-
-| `DOCS_TRIGGER_MODE` | Push to `main` | Weekly schedule | Manual dispatch |
-|---|---|---|---|
-| `on-merge` | ✅ Runs | ❌ No-op | ✅ Always runs |
-| `weekly` | ❌ No-op | ✅ Runs | ✅ Always runs |
-| unset | ❌ No-op | ❌ No-op | ✅ Always runs |
-
-Manual `workflow_dispatch` always works regardless of trigger mode — useful for testing, forced regeneration, or choosing a one-off engine without changing the default.
-
-## How the gate works
-
-The job's `if` condition checks the trigger source against the variable value:
-
-```yaml
-if: >
-  github.event_name == 'workflow_dispatch' ||
-  (github.event_name == 'push' && vars.DOCS_TRIGGER_MODE == 'on-merge') ||
-  (github.event_name == 'schedule' && vars.DOCS_TRIGGER_MODE == 'weekly')
-```
-
-When the condition evaluates to false, the `generate-and-deploy` job is skipped entirely. The workflow run appears in the Actions tab but completes in seconds with no compute cost.
-
-## Setting the variable
-
-Under **Settings → Secrets and variables → Actions → Variables**:
-
-```sh
-gh variable set DOCS_TRIGGER_MODE --body "on-merge"
-gh variable set DOCS_TRIGGER_MODE --body "weekly"
-gh variable delete DOCS_TRIGGER_MODE   # disable automatic triggers
-```
-
-## Weekly schedule
-
-The cron expression is `0 9 * * 1` — **Mondays at 9:00 AM UTC**. GitHub Actions cron jobs may fire a few minutes late during high-load periods. The schedule only activates when `DOCS_TRIGGER_MODE` is exactly `weekly`.
-
-## Concurrency
-
-The workflow uses `concurrency: { group: docs-site, cancel-in-progress: true }`. If a second run starts while a first is still in progress — two rapid pushes, for example — the older run is cancelled so only the latest commit generates docs. This also prevents two simultaneous runs from racing to push to `main` and clobbering each other's changelog state.
 ```
 
 
@@ -132,54 +111,187 @@ The workflow uses `concurrency: { group: docs-site, cancel-in-progress: true }`.
 ```md
 # Generation Engines
 
-Two engines exist for generating the codebase overview and changelog. You choose the default via a repo variable and can override it per-run via the `workflow_dispatch` input.
+Two engines exist for both the overview and the changelog generator, selectable **per run**:
 
-## Deterministic
+- **`deterministic`** — no API key needed. Walks the file tree and builds a real import graph
+  (overview), or lists raw commits (changelog). Fully mechanical, always available.
+- **`llm`** — sends a representative source sample (overview) or the raw commit list (changelog)
+  to the Claude API and asks for a written summary / grouped changelog. Needs `ANTHROPIC_API_KEY`
+  as a repo secret.
 
-No API key needed. The engine operates mechanically on the repo's files and git history.
+The default engine for automatic runs comes from the `DOCS_ENGINE` repo variable (`deterministic`
+if unset). A manual `workflow_dispatch` run can override it via the `engine` input, regardless of
+the repo default.
 
-**Overview output:** a directory tree rendered with Unicode box characters, followed by a local import graph — which files import which other local files.
+## Source Files
 
-**Changelog output:** a flat bullet list of commits with hash, date, author, and subject line.
 
-Output is fully reproducible: the same repo state always produces the same output. Good for CI environments where you want zero API cost, or when you haven't added the Anthropic key yet.
+### `docs/configuration/secrets-variables.md`
 
-## LLM
+```md
+# Secrets & Variables
 
-Sends representative source code to the Claude API and asks for written prose.
+All runtime configuration is managed through GitHub repository secrets and variables — no YAML editing required to change behavior.
 
-**Overview output:** a narrative architecture overview covering the project's purpose, key modules and what each does, and notable patterns or conventions. Claude is instructed to only describe what is actually in the source — not invent behavior.
+Set everything under **Settings → Secrets and variables → Actions**.
 
-**Changelog output:** commits grouped under `### Added`, `### Changed`, and `### Fixed` subheadings, written as human-readable entries rather than raw subject lines.
+## Variables
 
-Requires `ANTHROPIC_API_KEY` as a repo secret. Uses `claude-sonnet-4-6` with up to 3,000 output tokens for the overview and 1,500 for the changelog.
+Variables are non-sensitive values visible in workflow logs.
 
-## Choosing the default
+| Variable | Values | Default | Purpose |
+|---|---|---|---|
+| `DOCS_TRIGGER_MODE` | `on-merge`, `weekly`, unset | unset | Which automatic trigger fires. See [Trigger Modes](/configuration/trigger-modes). |
+| `DOCS_ENGINE` | `deterministic`, `llm` | `deterministic` | Default engine for automatic runs. See [Generation Engines](/configuration/engines). |
 
-Set `DOCS_ENGINE` under **Settings → Secrets and variables → Actions → Variables**:
+## Secrets
+
+Secrets are encrypted and never appear in logs.
+
+| Secret | Required | Purpose |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Only for `llm` engine | Authenticates Claude API requests. Get one at [console.anthropic.com](https://console.anthropic.com). |
+
+## Setting values with the GitHub CLI
 
 ```sh
+# Variables
+gh variable set DOCS_TRIGGER_MODE --body "on-merge"
 gh variable set DOCS_ENGINE --body "llm"
-gh variable set DOCS_ENGINE --body "deterministic"
+
+# Secrets (prompts for value securely)
+gh secret set ANTHROPIC_API_KEY
 ```
 
-If `DOCS_ENGINE` is unset the workflow defaults to `deterministic`.
+## Built-in GitHub token
 
-## Overriding per-run
+The workflow uses the automatically-provided `GITHUB_TOKEN` for three operations:
 
-A manual `workflow_dispatch` run exposes an `engine` input dropdown:
+1. **`git push`** — commits generated docs back to `main`
+2. **Upload Pages artifact** — packages the VitePress build
+3. **Deploy to Pages** — publishes to `github.io`
 
-| Input value | Effect |
-|---|---|
-| `repo-default` | Uses `DOCS_ENGINE` (or `deterministic` if unset) |
-| `deterministic` | Forces deterministic for this run only |
-| `llm` | Forces LLM for this run only |
+The `permissions` block in the workflow grants only the required scopes:
 
-This lets you trigger a one-off LLM generation without changing the repo default, or verify deterministic output without removing your API key.
+```yaml
+permissions:
+  contents: write   # git push
+  pages: write      # upload artifact
+  id-token: write   # OIDC auth for Pages deploy
+```
 
-## Engine resolution order
+No personal access token or additional configuration is needed.
 
-1. `workflow_dispatch` engine input (if not `repo-default`)
-2. `DOCS_ENGINE` repo variable
-3. Hardcoded fallback: `deterministic`
+## Variable precedence reminder
+
+For the engine specifically, the resolution order is: `workflow_dispatch` input → `DOCS_ENGINE` variable → `deterministic` fallback. The variable only applies to automatic and manual-with-`repo-default` runs.
+```
+
+
+### `docs/configuration/trigger-modes.md`
+
+```md
+# Trigger Modes
+
+The workflow (`.github/workflows/docs-site.yml`) defines both triggers — `push` to `main` and a
+weekly `schedule` — but only one is actually "live" at a time, controlled by a repo varia
+```
+
+
+### `docs/configuration/secrets-variables.md`
+
+```md
+# Secrets & Variables
+
+## Source Files
+
+
+### `docs/configuration/secrets-variables.md`
+
+```md
+# Secrets & Variables
+
+All runtime configuration is managed through GitHub repository secrets and variables — no YAML editing required to change behavior.
+
+Set everything under **Settings → Secrets and variables → Actions**.
+
+## Variables
+
+Variables are non-sensitive values visible in workflow logs.
+
+| Variable | Values | Default | Purpose |
+|---|---|---|---|
+| `DOCS_TRIGGER_MODE` | `on-merge`, `weekly`, unset | unset | Which automatic trigger fires. See [Trigger Modes](/configuration/trigger-modes). |
+| `DOCS_ENGINE` | `deterministic`, `llm` | `deterministic` | Default engine for automatic runs. See [Generation Engines](/configuration/engines). |
+
+## Secrets
+
+Secrets are encrypted and never appear in logs.
+
+| Secret | Required | Purpose |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Only for `llm` engine | Authenticates Claude API requests. Get one at [console.anthropic.com](https://console.anthropic.com). |
+
+## Setting values with the GitHub CLI
+
+```sh
+# Variables
+gh variable set DOCS_TRIGGER_MODE --body "on-merge"
+gh variable set DOCS_ENGINE --body "llm"
+
+# Secrets (prompts for value securely)
+gh secret set ANTHROPIC_API_KEY
+```
+
+## Built-in GitHub token
+
+The workflow uses the automatically-provided `GITHUB_TOKEN` for three operations:
+
+1. **`git push`** — commits generated docs back to `main`
+2. **Upload Pages artifact** — packages the VitePress build
+3. **Deploy to Pages** — publishes to `github.io`
+
+The `permissions` block in the workflow grants only the required scopes:
+
+```yaml
+permissions:
+  contents: write   # git push
+  pages: write      # upload artifact
+  id-token: write   # OIDC auth for Pages deploy
+```
+
+No personal access token or additional configuration is needed.
+
+## Variable precedence reminder
+
+For the engine specifically, the resolution order is: `workflow_dispatch` input → `DOCS_ENGINE` variable → `deterministic` fallback. The variable only applies to automatic and manual-with-`repo-default` runs.
+```
+
+
+### `docs/configuration/trigger-modes.md`
+
+```md
+# Trigger Modes
+
+The workflow (`.github/workflows/docs-site.yml`) defines both triggers — `push` to `main` and a
+weekly `schedule` — but only one is actually "live" at a time, controlled by a repo variable so
+you never have to edit the YAML to switch:
+
+| Repo variable | Value | Behavior |
+| --- | --- | --- |
+| `DOCS_TRIGGER_MODE` | `on-merge` | Regenerates on every push to `main`. The scheduled run is a no-op. |
+| `DOCS_TRIGGER_MODE` | `weekly` | Regenerates on the Monday 9am UTC schedule. Pushes to `main` are a no-op. |
+| unset | — | Neither automatic trigger fires. Manual `workflow_dispatch` runs still work. |
+
+Set it under **Settings → Secrets and variables → Actions → Variables**.
+
+## Source Files
+
+
+### `docs/configuration/secrets-variables.md`
+
+```md
+# Secrets & Variables
+
+All runtime configuration is managed through GitHub repository secrets and variables — no YAML editing required to
 ```

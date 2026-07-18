@@ -8,7 +8,7 @@ title: auto-docs-site
 
 # <span class="bb-accent">auto-docs-site</span>
 
-<p class="bb-hero-desc">A GitHub Actions automation that keeps a live [VitePress](https://vitepress.dev) docs site up to</p>
+<p class="bb-hero-desc">A GitHub Actions automation that keeps a live [VitePress](https://vitepress.dev) docs site up to date on its own — codebase overview, changelog, and a full multi-page site structure regenerated either on every merge to `main` or on a weekly schedule — and deployed to GitHub Pages.</p>
 
 <div class="bb-card-grid">
   <a href="/configuration/trigger-modes" class="bb-card">
