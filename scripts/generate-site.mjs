@@ -1,18 +1,17 @@
 /**
- * Unified site generator — ALWAYS regenerates the full site on every run.
+ * Unified site generator.
  *
  * llm mode:
  *   Asks Claude to design the site structure (nav, sidebar, page list, accent color)
  *   and write prose content for every page. Updates generated-config.json,
  *   generated-tokens.css, all .md files, codebase-overview.md, and changelog.md.
+ *   Use this when the repo's structure changes (new features, new modules, major refactors)
+ *   or when you want to add new pages/sections.
  *
  * deterministic mode:
- *   Reads the existing generated-config.json for structure (or derives a minimal
- *   default from the README). Regenerates every page from README sections and
- *   matching source files. Also regenerates codebase-overview.md and changelog.md.
- *   Does not need an API key. Does not add new pages/sections — that requires llm.
- *
- * Either way: every page reflects the current state of the repo after each run.
+ *   Regenerates only codebase-overview.md and changelog.md. All other pages are left
+ *   exactly as the last LLM run wrote them — safe, fast, no API key needed.
+ *   Use this for routine merges where you want fresh reference docs without API cost.
  */
 
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
@@ -39,7 +38,6 @@ const changelogPath = join(docsDir, 'changelog.md')
 const overviewPath = join(docsDir, 'codebase-overview.md')
 
 const CHANGELOG_HEADING = '# Changelog\n'
-const CODE_EXTS = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.py', '.go', '.rb', '.rs', '.java'])
 
 async function run() {
   const engine = parseEngineArg()
@@ -121,54 +119,10 @@ async function runLlm(files, sha) {
 }
 
 // ── Deterministic mode ────────────────────────────────────────────────────
-// No API key needed. Fully regenerates all pages from README + source files.
+// No API key needed. Only touches codebase-overview.md and changelog.md.
+// All other pages are left exactly as the last LLM run wrote them.
 
 async function runDeterministic(files, sha) {
-  const readmePath = join(root, 'README.md')
-  const readme = existsSync(readmePath) ? readFileSync(readmePath, 'utf8') : ''
-  const readmeSections = parseReadmeSections(readme)
-
-  // Load existing structure; fall back to a README-derived default
-  const config = existsSync(generatedConfigPath)
-    ? JSON.parse(readFileSync(generatedConfigPath, 'utf8'))
-    : buildDefaultConfig(readme)
-
-  // Write generated-config.json if it didn't exist yet
-  if (!existsSync(generatedConfigPath)) {
-    writeFileSync(generatedConfigPath, JSON.stringify(config, null, 2) + '\n')
-    console.log('Wrote generated-config.json (default)')
-  }
-
-  // Write generated-tokens.css if it didn't exist yet
-  if (!existsSync(generatedTokensPath)) {
-    writeTokens('#5169dd', '#4257c4')
-    console.log('Wrote generated-tokens.css (default)')
-  }
-
-  // Collect all non-reference pages from the current config
-  const allPageLinks = []
-  for (const group of config.sidebar || []) {
-    for (const item of group.items || []) {
-      if (item.link !== '/codebase-overview' && item.link !== '/changelog') {
-        allPageLinks.push({ link: item.link, title: item.text })
-      }
-    }
-  }
-
-  // Regenerate content for every non-reference page
-  for (const page of allPageLinks) {
-    const mdPath = linkToPath(page.link)
-    console.log(`Regenerating ${mdPath}…`)
-
-    const content = buildDeterministicPageContent(page, files, readmeSections, readme, config)
-    const fullPath = join(docsDir, mdPath)
-    mkdirSync(dirname(fullPath), { recursive: true })
-
-    const fm = mdPath === 'index.md' ? `---\ntitle: ${config.title}\n---\n\n` : ''
-    writeFileSync(fullPath, `${fm}# ${page.title}\n\n${content.trim()}\n`)
-  }
-
-  // Codebase overview (file tree + import graph)
   const tree = buildTree(files)
   const treeLines = renderTree(tree)
   const graph = buildImportGraph(root, files)
@@ -196,178 +150,6 @@ async function runDeterministic(files, sha) {
 
   await updateChangelog(sha, 'deterministic')
   console.log('Deterministic generation complete.')
-}
-
-// ── Deterministic content helpers ─────────────────────────────────────────
-
-function buildDeterministicPageContent(page, files, readmeSections, readme, config) {
-  const parts = []
-
-  // Special case: home page gets a card grid matching the current nav
-  if (page.link === '/') {
-    return buildDeterministicHomePage(config, readme)
-  }
-
-  // 1. Find a matching README section by title similarity
-  const readmeSection = findReadmeSection(readmeSections, page.title)
-  if (readmeSection) {
-    parts.push(readmeSection.content)
-  }
-
-  // 2. Find relevant source files by page keywords
-  const relevant = findRelevantFiles(files, page.link, page.title)
-  if (relevant.length > 0) {
-    parts.push(`## Source Files\n`)
-    for (const f of relevant.slice(0, 6)) {
-      const fullPath = join(root, f.path)
-      if (!existsSync(fullPath)) continue
-      const src = readFileSync(fullPath, 'utf8')
-      const lang = extname(f.path).slice(1) || 'text'
-      parts.push(`### \`${f.path}\`\n\n\`\`\`${lang}\n${src.slice(0, 3000).trimEnd()}\n\`\`\`\n`)
-    }
-  }
-
-  // 3. Fallback if nothing was found
-  if (parts.length === 0) {
-    parts.push(
-      `_This page is generated mechanically from the repository source._\n` +
-      `_Run with \`--engine=llm\` to generate detailed prose documentation._\n`,
-    )
-  }
-
-  return parts.join('\n\n')
-}
-
-function buildDeterministicHomePage(config, readme) {
-  // Derive the hero description from the README first non-heading line
-  const heroDesc =
-    readme.match(/^#[^\n]*\n+([^\n#][^\n]+)/m)?.[1]?.trim() ||
-    config.description ||
-    `Documentation for ${config.title}.`
-
-  // Build card grid from nav (skip home entry itself)
-  const navCards = (config.nav || [])
-    .filter((n) => n.link !== '/')
-    .map((n) => {
-      const icon = navIcon(n.text)
-      const desc = navDescription(n.text, config)
-      return (
-        `  <a href="${n.link}" class="bb-card">\n` +
-        `    <div class="bb-card-icon bb-icon-blue">${icon}</div>\n` +
-        `    <div class="bb-card-title">${n.text}</div>\n` +
-        `    <div class="bb-card-desc">${desc}</div>\n` +
-        `  </a>`
-      )
-    })
-    .join('\n')
-
-  return (
-    `<p class="bb-breadcrumb">Documentation</p>\n\n` +
-    `# <span class="bb-accent">${config.title}</span>\n\n` +
-    `<p class="bb-hero-desc">${heroDesc}</p>\n\n` +
-    `<div class="bb-card-grid">\n${navCards}\n</div>\n`
-  )
-}
-
-function navIcon(sectionText) {
-  const t = sectionText.toLowerCase()
-  if (t.includes('start') || t.includes('setup') || t.includes('install')) return '🚀'
-  if (t.includes('api') || t.includes('reference') || t.includes('ref')) return '📖'
-  if (t.includes('config') || t.includes('setting')) return '⚙️'
-  if (t.includes('guide') || t.includes('how') || t.includes('arch')) return '🏗️'
-  if (t.includes('deploy') || t.includes('ci') || t.includes('cd')) return '🔄'
-  if (t.includes('test')) return '🧪'
-  if (t.includes('changelog') || t.includes('change') || t.includes('release')) return '📋'
-  if (t.includes('model') || t.includes('schema') || t.includes('data')) return '🗄️'
-  return '📁'
-}
-
-function navDescription(sectionText, config) {
-  const t = sectionText.toLowerCase()
-  const title = config.title || 'this project'
-  if (t.includes('start') || t.includes('setup')) return `Get ${title} running quickly.`
-  if (t.includes('api')) return 'Endpoints, request formats, and response schemas.'
-  if (t.includes('config')) return 'Configuration options, environment variables, and settings.'
-  if (t.includes('arch') || t.includes('how')) return 'How the components fit together.'
-  if (t.includes('deploy') || t.includes('ci')) return 'Build, test, and deployment pipeline.'
-  if (t.includes('reference')) return 'Auto-generated reference documentation.'
-  return `${sectionText} documentation.`
-}
-
-function parseReadmeSections(readme) {
-  if (!readme) return []
-  const sections = []
-  let currentTitle = null
-  let buffer = []
-
-  for (const line of readme.split('\n')) {
-    const h2 = line.match(/^## (.+)/)
-    if (h2) {
-      if (currentTitle) sections.push({ title: currentTitle, content: buffer.join('\n').trim() })
-      currentTitle = h2[1].trim()
-      buffer = []
-    } else if (currentTitle) {
-      buffer.push(line)
-    }
-  }
-  if (currentTitle) sections.push({ title: currentTitle, content: buffer.join('\n').trim() })
-  return sections
-}
-
-function findReadmeSection(sections, pageTitle) {
-  const keywords = pageTitle.toLowerCase().split(/\W+/).filter((k) => k.length > 3)
-  return sections.find((s) => keywords.some((k) => s.title.toLowerCase().includes(k))) ?? null
-}
-
-function findRelevantFiles(files, link, title) {
-  const segments = link.replace(/^\//, '').split('/')
-  const keywords = [
-    ...segments,
-    ...title.toLowerCase().split(/\W+/).filter((k) => k.length > 3),
-  ]
-
-  return files
-    .filter((f) => {
-      const lf = f.path.toLowerCase()
-      const isCode = CODE_EXTS.has(extname(f.path)) || f.path.endsWith('.md')
-      return isCode && keywords.some((k) => lf.includes(k))
-    })
-    .sort((a, b) => a.size - b.size) // prefer smaller files (more likely to be focused)
-}
-
-function buildDefaultConfig(readme) {
-  const repoName = basename(root)
-  const desc =
-    readme.match(/^#[^\n]*\n+([^\n#][^\n]+)/m)?.[1]?.trim() ||
-    `Documentation for ${repoName}.`
-
-  return {
-    title: repoName,
-    description: desc,
-    footer: 'Auto-generated docs — run with --engine=llm for full site structure.',
-    nav: [
-      { text: 'Overview', link: '/' },
-      { text: 'Reference', link: '/codebase-overview' },
-    ],
-    sidebar: [
-      {
-        text: 'Overview',
-        items: [{ text: 'Introduction', link: '/' }],
-      },
-      {
-        text: 'Reference',
-        items: [
-          { text: 'Codebase Overview', link: '/codebase-overview' },
-          { text: 'Changelog', link: '/changelog' },
-        ],
-      },
-    ],
-  }
-}
-
-function linkToPath(link) {
-  if (link === '/') return 'index.md'
-  return link.replace(/^\//, '') + '.md'
 }
 
 // ── LLM structure generation ──────────────────────────────────────────────

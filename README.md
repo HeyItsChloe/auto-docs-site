@@ -18,15 +18,15 @@ Set it under **Settings → Secrets and variables → Actions → Variables**.
 
 ## Choosing the generation engine
 
-Two engines exist, selectable **per run**. Both engines fully regenerate the entire site on every run — every page, every tab, every section.
+Two engines exist, selectable **per run**.
 
-- **`deterministic`** — no API key needed. Reads the existing site structure from `generated-config.json` and regenerates every page from matching README sections and source files. Also rebuilds the file-tree overview and raw-commit changelog. Fast, free, always current.
+- **`deterministic`** — no API key needed. Regenerates only `codebase-overview.md` (file tree + import graph) and `changelog.md` (raw commit list). All other pages — nav, sidebar, prose — are left exactly as the last `llm` run wrote them. Fast, free, always current for reference data.
 - **`llm`** — sends a representative source sample to the Claude API. Designs the site structure from scratch (nav, sidebar, page list, accent color), writes prose content for every page, and groups the changelog into Added / Changed / Fixed sections. Needs `ANTHROPIC_API_KEY` as a repo secret.
 
-**The honest limitation:** only the `llm` engine can *add new pages or sections* when the repo gains a new concept — detecting "this new directory is an API" requires semantic understanding. But once LLM creates a page, every subsequent `deterministic` run keeps it current by pulling in the latest README sections and source files. In practice:
+**The honest limitation:** only the `llm` engine can *add or restructure pages* when the repo gains a new concept — detecting "this new directory is an API" requires semantic understanding. But once LLM creates those pages, every subsequent `deterministic` run keeps the reference data current. In practice:
 
 - Use `llm` when the repo's structure changes significantly (new features, new modules, major refactors).
-- Use `deterministic` for routine merges where you just want the docs to stay fresh without API cost.
+- Use `deterministic` for routine merges where you just want fresh reference docs without API cost.
 
 The default engine for automatic runs comes from the `DOCS_ENGINE` repo variable (`deterministic` if unset). A manual `workflow_dispatch` run can override it via the `engine` input, regardless of the repo default.
 
