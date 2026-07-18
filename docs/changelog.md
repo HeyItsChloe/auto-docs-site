@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-18 — 2 commits (`48a148a`)
+
+_engine: `deterministic`_
+
+- css (HeyItsChloe, 2026-07-17, `48a148a`)
+- docs: regenerate overview & changelog [skip ci] (docs-site-bot, 2026-07-18, `cf39ec7`)
+
 ## 2026-07-18 — 1 commit (`279302a`)
 
 _engine: `deterministic`_
