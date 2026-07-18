@@ -22,3 +22,28 @@ export function commitsSince(root, sinceSha) {
     return { hash, date, author, subject }
   })
 }
+
+export function changedFilesSince(root, sinceSha) {
+  if (!sinceSha) return []
+  try {
+    const out = execFileSync(
+      'git', ['diff', '--name-only', `${sinceSha}..HEAD`],
+      { cwd: root },
+    ).toString().trim()
+    return out ? out.split('\n').filter(Boolean) : []
+  } catch {
+    return []
+  }
+}
+
+export function diffForFiles(root, sinceSha, files) {
+  if (!sinceSha || files.length === 0) return ''
+  try {
+    return execFileSync(
+      'git', ['diff', `${sinceSha}..HEAD`, '--', ...files],
+      { cwd: root, maxBuffer: 10 * 1024 * 1024 },
+    ).toString()
+  } catch {
+    return ''
+  }
+}

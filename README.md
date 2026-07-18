@@ -20,13 +20,10 @@ Set it under **Settings → Secrets and variables → Actions → Variables**.
 
 Two engines exist, selectable **per run**.
 
-- **`deterministic`** — no API key needed. Regenerates only `codebase-overview.md` (file tree + import graph) and `changelog.md` (raw commit list). All other pages — nav, sidebar, prose — are left exactly as the last `llm` run wrote them. Fast, free, always current for reference data.
-- **`llm`** — sends a representative source sample to the Claude API. Designs the site structure from scratch (nav, sidebar, page list, accent color), writes prose content for every page, and groups the changelog into Added / Changed / Fixed sections. Needs `ANTHROPIC_API_KEY` as a repo secret.
+- **`llm`** (recommended default) — on every merge, reads the git diff and asks Claude which pages are affected by what changed. Edits only those pages — surgically. Never removes accurate content. If the diff introduces a new concept with no existing page, adds that page. First-time run (no existing site) builds the full structure from scratch. Needs `ANTHROPIC_API_KEY` as a repo secret.
+- **`deterministic`** — no API key needed. Only updates `codebase-overview.md` (file tree + import graph) and `changelog.md` (raw commit list). All prose pages are left exactly as the last `llm` run wrote them. Use this when you want a free, fast reference refresh without touching prose.
 
-**The honest limitation:** only the `llm` engine can *add or restructure pages* when the repo gains a new concept — detecting "this new directory is an API" requires semantic understanding. But once LLM creates those pages, every subsequent `deterministic` run keeps the reference data current. In practice:
-
-- Use `llm` when the repo's structure changes significantly (new features, new modules, major refactors).
-- Use `deterministic` for routine merges where you just want fresh reference docs without API cost.
+Set `DOCS_ENGINE` to `llm` in your repo variables to make smart incremental updates the default on every merge.
 
 The default engine for automatic runs comes from the `DOCS_ENGINE` repo variable (`deterministic` if unset). A manual `workflow_dispatch` run can override it via the `engine` input, regardless of the repo default.
 
