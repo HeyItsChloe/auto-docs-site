@@ -1,6 +1,6 @@
 # Codebase Overview
 
-_Generated 2026-07-18T00:33:29.532Z · engine: `deterministic` · commit `30b7d38`_
+_Generated 2026-07-18T00:34:53.710Z · engine: `deterministic` · commit `279302a`_
 
 ## File tree
 
@@ -16,7 +16,7 @@ _Generated 2026-07-18T00:33:29.532Z · engine: `deterministic` · commit `30b7d3
 │   │   └── theme/
 │   │       ├── custom.css (868B)
 │   │       └── index.ts (94B)
-│   ├── changelog.md (504B)
+│   ├── changelog.md (753B)
 │   ├── codebase-overview.md (1.1KB)
 │   └── index.md (1.6KB)
 ├── package-lock.json (86.0KB)
