@@ -1,0 +1,16 @@
+{
+  "name": "auto-docs-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "generate:overview": "node scripts/generate-overview.mjs",
+    "generate:changelog": "node scripts/generate-changelog.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.3.4"
+  }
+}

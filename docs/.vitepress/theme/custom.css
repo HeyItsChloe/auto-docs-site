@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --vp-c-brand-1: #e50914;
+  --vp-c-brand-2: #e50914;
+  --vp-c-brand-3: #b3070f;
+  --vp-c-brand-soft: rgba(229, 9, 20, 0.14);
+
+  --vp-c-bg: #0b0b0b;
+  --vp-c-bg-alt: #141414;
+  --vp-c-bg-elv: #141414;
+  --vp-c-bg-soft: #181818;
+
+  --vp-c-text-1: #e5e5e5;
+  --vp-c-text-2: #b3b3b3;
+  --vp-c-text-3: #6c6c6c;
+
+  --vp-c-divider: rgba(255, 255, 255, 0.1);
+
+  --vp-font-family-base: 'Inter', system-ui, sans-serif;
+}
+
+.dark {
+  --vp-c-bg: #0b0b0b;
+  --vp-c-bg-alt: #141414;
+  --vp-c-bg-elv: #141414;
+}
+
+.VPNavBarTitle .title,
+h1.title {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  color: #e50914 !important;
+}
+
+.vp-doc h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+}
+
+a {
+  color: var(--vp-c-brand-1);
+}
