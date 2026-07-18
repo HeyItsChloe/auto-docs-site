@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-18 — 1 commit (`ef9c49a`)
+
+_engine: `deterministic`_
+
+- fix: handle stale SHA in .last-sha.json after rebase (HeyItsChloe, 2026-07-17, `ef9c49a`)
+
 ## 2026-07-18 — 5 commits (`5eb9b6a`)
 
 _engine: `deterministic`_

@@ -1,12 +1,10 @@
 # Codebase Overview
 
-_Generated 2026-07-18T02:40:11.100Z · commit `5eb9b6a`_
+_Generated 2026-07-18T02:48:38.729Z · commit `ef9c49a`_
 
 ## File tree
 
 ```
-├── .claude/
-│   └── settings.local.json (4.1KB)
 ├── .github/
 │   └── workflows/
 │       └── docs-site.yml (2.2KB)
@@ -22,7 +20,7 @@ _Generated 2026-07-18T02:40:11.100Z · commit `5eb9b6a`_
 │   │       ├── custom.css (12.3KB)
 │   │       ├── generated-tokens.css (546B)
 │   │       └── index.ts (154B)
-│   ├── changelog.md (1.9KB)
+│   ├── changelog.md (2.5KB)
 │   ├── codebase-overview.md (2.1KB)
 │   ├── configuration/
 │   │   ├── engines.md (2.2KB)
@@ -47,7 +45,7 @@ _Generated 2026-07-18T02:40:11.100Z · commit `5eb9b6a`_
     ├── generate-site.mjs (17.4KB)
     └── lib/
         ├── claude.mjs (1.3KB)
-        ├── git-log.mjs (1.2KB)
+        ├── git-log.mjs (1.6KB)
         └── repo-scan.mjs (2.8KB)
 ```
 
