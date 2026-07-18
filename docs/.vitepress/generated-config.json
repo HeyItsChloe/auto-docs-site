@@ -1,0 +1,46 @@
+{
+  "title": "auto-docs-site",
+  "description": "A GitHub Actions pipeline that auto-generates and deploys a live VitePress docs site on every merge — codebase overview, changelog, and thoughtful page structure from your repo's actual content.",
+  "footer": "Regenerated automatically on merge to main — powered by GitHub Actions.",
+  "nav": [
+    { "text": "Getting Started", "link": "/" },
+    { "text": "Configuration", "link": "/configuration/trigger-modes" },
+    { "text": "How It Works", "link": "/how-it-works/architecture" },
+    { "text": "Reference", "link": "/codebase-overview" }
+  ],
+  "sidebar": [
+    {
+      "text": "Getting Started",
+      "items": [
+        { "text": "Introduction", "link": "/" },
+        { "text": "Quick Setup", "link": "/setup/quick-setup" },
+        { "text": "Local Development", "link": "/setup/local-development" }
+      ]
+    },
+    {
+      "text": "Configuration",
+      "items": [
+        { "text": "Trigger Modes", "link": "/configuration/trigger-modes" },
+        { "text": "Generation Engines", "link": "/configuration/engines" },
+        { "text": "Secrets & Variables", "link": "/configuration/secrets-variables" }
+      ]
+    },
+    {
+      "text": "How It Works",
+      "items": [
+        { "text": "Architecture", "link": "/how-it-works/architecture" },
+        { "text": "Repo Scanner", "link": "/how-it-works/repo-scanner" },
+        { "text": "Git Log", "link": "/how-it-works/git-log" },
+        { "text": "Claude Integration", "link": "/how-it-works/claude-integration" },
+        { "text": "Workflow Deep Dive", "link": "/how-it-works/workflow" }
+      ]
+    },
+    {
+      "text": "Reference",
+      "items": [
+        { "text": "Codebase Overview", "link": "/codebase-overview" },
+        { "text": "Changelog", "link": "/changelog" }
+      ]
+    }
+  ]
+}

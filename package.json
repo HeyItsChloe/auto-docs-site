@@ -7,6 +7,7 @@
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
+    "generate:site": "node scripts/generate-site.mjs",
     "generate:overview": "node scripts/generate-overview.mjs",
     "generate:changelog": "node scripts/generate-changelog.mjs"
   },

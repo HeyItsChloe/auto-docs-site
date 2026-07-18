@@ -58,13 +58,8 @@ jobs:
         env:
           DOCS_ENGINE: ${{ vars.DOCS_ENGINE }}
 
-      - name: Generate codebase overview
-        run: npm run generate:overview -- --engine=${{ steps.engine.outputs.value }}
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
-      - name: Generate changelog
-        run: npm run generate:changelog -- --engine=${{ steps.engine.outputs.value }}
+      - name: Generate site
+        run: npm run generate:site -- --engine=${{ steps.engine.outputs.value }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
@@ -72,8 +67,8 @@ jobs:
         run: |
           git config user.name "docs-site-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/codebase-overview.md docs/changelog.md scripts/.last-sha.json
-          git diff --cached --quiet && echo "No doc changes to commit" || git commit -m "docs: regenerate overview & changelog [skip ci]"
+          git add docs/ scripts/.last-sha.json
+          git diff --cached --quiet && echo "No doc changes to commit" || git commit -m "docs: regenerate site [skip ci]"
           git push
 
       - run: npm run build

@@ -1,44 +1,33 @@
 /* ============================================================
-   Design tokens copied 1:1 from BusyBuddy_v2 CSS bundle
-   Source: 11thandorange.github.io/BusyBuddy_v2/assets/index-DfXY5M_C.css
+   Design tokens — accent colors live in generated-tokens.css
+   so each generated site can use its own palette.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import './generated-tokens.css';
 
-/* --- Token overrides — applied in both root and .dark
-       so they win regardless of VitePress SSR hydration order --- */
+/* --- Non-brand tokens (shared across all sites) ------------ */
 
 :root,
 .dark {
-  /* Brand — bg-brand: #5169dd */
-  --vp-c-brand-1:    #5169dd;
-  --vp-c-brand-2:    #5169dd;
-  --vp-c-brand-3:    #4257c4;   /* hover:bg-brand-hover */
-  --vp-c-brand-soft: #5169dd1a; /* bg-brand-muted */
-
-  /* Backgrounds — bg-background: #0f1117 */
   --vp-c-bg:      #0f1117;
   --vp-c-bg-alt:  #0f1117;
-  --vp-c-bg-elv:  #1a1d27;     /* bg-background-elevated */
-  --vp-c-bg-soft: #ffffff08;   /* bg-surface */
+  --vp-c-bg-elv:  #1a1d27;
+  --vp-c-bg-soft: #ffffff08;
 
-  /* Text */
-  --vp-c-text-1: #ffffff;   /* text-content */
-  --vp-c-text-2: #a1a1aa;   /* text-content-secondary */
-  --vp-c-text-3: #71717a;   /* text-content-muted */
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: #a1a1aa;
+  --vp-c-text-3: #71717a;
 
-  /* Borders */
-  --vp-c-divider: #ffffff14; /* border-surface-border */
+  --vp-c-divider: #ffffff14;
   --vp-c-gutter:  #0f1117;
 
-  /* Typography */
   --vp-font-family-base: Inter, system-ui, -apple-system, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Layout */
-  --vp-nav-height:    64px;    /* h-16 = 4rem */
-  --vp-sidebar-width: 256px;   /* w-64 = 16rem */
+  --vp-nav-height:    64px;
+  --vp-sidebar-width: 256px;
 }
 
 /* --- Base -------------------------------------------------- */
@@ -53,7 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: #5169dd4d; }
+::selection { background: var(--bb-accent-selection); }
 
 ::-webkit-scrollbar              { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track        { background: transparent; }
@@ -75,7 +64,7 @@ body {
   height: var(--vp-nav-height) !important;
 }
 
-/* Two-tone wordmark component */
+/* Two-tone wordmark */
 .bb-nav-logo {
   display: flex;
   align-items: center;
@@ -85,7 +74,7 @@ body {
   white-space: nowrap;
   letter-spacing: -0.2px;
 }
-.bb-logo-accent { color: #5169dd; }
+.bb-logo-accent { color: var(--bb-accent); }
 .bb-logo-main   { color: #ffffff; }
 .bb-logo-label  {
   color: #a1a1aa;
@@ -94,7 +83,7 @@ body {
   margin-left: 8px;
 }
 
-/* Nav menu — flat links, no pill container */
+/* Nav menu */
 .VPNavBarMenu {
   background:    none !important;
   border-radius: 0    !important;
@@ -116,10 +105,8 @@ body {
 .VPNavBarMenuLink:hover  { color: #fff !important; background: #ffffff0f; }
 .VPNavBarMenuLink.active { color: #fff !important; background: none !important; font-weight: 600; }
 
-/* GitHub social link → outlined button matching BusyBuddy */
-.VPSocialLinks {
-  padding-left: 12px;
-}
+/* GitHub social link */
+.VPSocialLinks { padding-left: 12px; }
 .VPSocialLink {
   border: 1px solid #ffffff26 !important;
   border-radius: 6px !important;
@@ -136,7 +123,7 @@ body {
 }
 .VPSocialLinkIcon { width: 16px; height: 16px; color: #ffffff !important; fill: #ffffff !important; }
 
-/* Hide dark mode toggle — BusyBuddy is always dark */
+/* Hide dark mode toggle */
 .VPNavBarAppearance { display: none !important; }
 
 /* --- Sidebar ----------------------------------------------- */
@@ -151,7 +138,6 @@ body {
 
 .VPSidebarNav { padding: 24px 0 40px; }
 
-/* Section label — "GETTING STARTED" */
 .VPSidebarItem.level-0 > .item {
   padding: 0 20px;
   margin-bottom: 4px;
@@ -164,7 +150,6 @@ body {
   letter-spacing: 0.08em;
 }
 
-/* Links */
 .VPSidebarItem .link {
   padding: 6px 20px !important;
   margin: 0 !important;
@@ -179,14 +164,11 @@ body {
 
 /* --- Content area ------------------------------------------ */
 
-/* Hide right-side TOC — BusyBuddy doesn't show it */
 .VPDocAside,
 .VPDocAsideOutline { display: none !important; }
 
-/* Expand content to fill without aside */
 .VPDoc.has-aside .content-container { max-width: 760px !important; }
 
-/* Remove any card/white-box wrapper that our last CSS added */
 .VPDoc .content {
   background:    transparent !important;
   box-shadow:    none !important;
@@ -204,70 +186,54 @@ body {
 
 /* --- Doc typography ---------------------------------------- */
 
-/* h1 — text-heading-lg: 2.25rem / 700 / 1.25 */
 .vp-doc h1 {
-  font-size:     2.25rem;
-  font-weight:   700;
-  line-height:   1.25;
-  color:         #ffffff;
-  border-bottom: none;
+  font-size:      2.25rem;
+  font-weight:    700;
+  line-height:    1.25;
+  color:          #ffffff;
+  border-bottom:  none;
   padding-bottom: 0;
-  margin-top:    0;
-  margin-bottom: 12px;
+  margin-top:     0;
+  margin-bottom:  12px;
   letter-spacing: -0.02em;
 }
 
-/* h2 — text-heading-sm: 1.25rem / 700 / 1.4 */
 .vp-doc h2 {
-  font-size:     1.25rem;
-  font-weight:   700;
-  line-height:   1.4;
-  color:         #ffffff;
-  border-top:    none;
-  border-bottom: 1px solid #ffffff14;
-  padding-top:   0;
+  font-size:      1.25rem;
+  font-weight:    700;
+  line-height:    1.4;
+  color:          #ffffff;
+  border-top:     none;
+  border-bottom:  1px solid #ffffff14;
+  padding-top:    0;
   padding-bottom: 8px;
-  margin-top:    40px;
-  margin-bottom: 16px;
+  margin-top:     40px;
+  margin-bottom:  16px;
 }
 
-/* h3 */
 .vp-doc h3 {
-  font-size:   1rem;
-  font-weight: 600;
-  color:       #ffffff;
-  margin-top:  28px;
+  font-size:     1rem;
+  font-weight:   600;
+  color:         #ffffff;
+  margin-top:    28px;
   margin-bottom: 8px;
 }
 
-/* Paragraphs — prose-body: color #a1a1aa, line-height 1.7 */
 .vp-doc p {
-  font-size:   0.9375rem;
-  line-height: 1.7;
-  color:       #a1a1aa;
-  margin-top:  0;
+  font-size:     0.9375rem;
+  line-height:   1.7;
+  color:         #a1a1aa;
+  margin-top:    0;
   margin-bottom: 16px;
 }
 
-/* Links */
-.vp-doc a {
-  color: #5169dd;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.vp-doc a:hover { color: #7b8ff0; }
+.vp-doc a { color: var(--bb-accent); text-decoration: underline; text-underline-offset: 2px; }
+.vp-doc a:hover { color: var(--bb-accent-light); }
 
-/* Lists */
 .vp-doc ul,
 .vp-doc ol { padding-left: 24px; margin-bottom: 16px; }
-.vp-doc li {
-  font-size:   0.9375rem;
-  line-height: 1.7;
-  color:       #a1a1aa;
-  margin-bottom: 4px;
-}
+.vp-doc li { font-size: 0.9375rem; line-height: 1.7; color: #a1a1aa; margin-bottom: 4px; }
 
-/* Inline code */
 .vp-doc :not(pre) > code {
   background:    #ffffff14;
   color:         #a1a1aa;
@@ -277,7 +243,6 @@ body {
   font-family:   'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Code blocks */
 .vp-doc div[class*='language-'] {
   background:    #1a1d27 !important;
   border:        1px solid #ffffff14;
@@ -294,20 +259,17 @@ body {
 }
 .vp-doc div[class*='language-'] .lang { color: #71717a; font-size: 12px; }
 
-/* HR */
 .vp-doc hr { border-color: #ffffff14; margin: 32px 0; }
 
-/* Blockquote */
 .vp-doc blockquote {
-  background:    #5169dd1a;
-  border-left:   3px solid #5169dd;
+  background:    var(--bb-accent-soft);
+  border-left:   3px solid var(--bb-accent);
   border-radius: 0 6px 6px 0;
   padding:       12px 16px;
   margin:        16px 0;
 }
 .vp-doc blockquote p { color: #a1a1aa; margin: 0; }
 
-/* Tables */
 .vp-doc table {
   width:           100%;
   border-collapse: separate;
@@ -326,56 +288,39 @@ body {
   text-align:    left;
   border-bottom: 1px solid #ffffff14;
 }
-.vp-doc td {
-  padding:       10px 16px;
-  color:         #a1a1aa;
-  border-bottom: 1px solid #ffffff14;
-}
+.vp-doc td { padding: 10px 16px; color: #a1a1aa; border-bottom: 1px solid #ffffff14; }
 .vp-doc tr:last-child td { border-bottom: none; }
 
-/* Custom blocks */
 .vp-doc .custom-block          { border-radius: 8px; }
-.vp-doc .custom-block.tip     { background: #5169dd1a; border-color: #5169dd; }
-.vp-doc .custom-block.warning { background: #f59e0b1a; border-color: #f59e0b; }
-.vp-doc .custom-block.danger  { background: #ef44441a; border-color: #ef4444; }
-.vp-doc .custom-block p       { color: #a1a1aa; }
-.vp-doc .custom-block .title  { color: #ffffff; }
+.vp-doc .custom-block.tip      { background: var(--bb-accent-soft); border-color: var(--bb-accent); }
+.vp-doc .custom-block.warning  { background: #f59e0b1a; border-color: #f59e0b; }
+.vp-doc .custom-block.danger   { background: #ef44441a; border-color: #ef4444; }
+.vp-doc .custom-block p        { color: #a1a1aa; }
+.vp-doc .custom-block .title   { color: #ffffff; }
 
 /* --- Doc prev/next footer ---------------------------------- */
 
-.VPDocFooter {
-  border-top:  1px solid #ffffff14;
-  margin-top:  40px;
-  padding-top: 24px;
-}
+.VPDocFooter { border-top: 1px solid #ffffff14; margin-top: 40px; padding-top: 24px; }
 .VPDocFooter .pager-link {
   border:        1px solid #ffffff14;
   border-radius: 8px;
   background:    #ffffff08;
   transition:    background 0.15s, border-color 0.15s;
 }
-.VPDocFooter .pager-link:hover {
-  background:    #ffffff0f;
-  border-color:  #ffffff26;
-}
-.VPDocFooter .pager-link .title { color: #5169dd; font-weight: 600; font-size: 14px; }
+.VPDocFooter .pager-link:hover { background: #ffffff0f; border-color: #ffffff26; }
+.VPDocFooter .pager-link .title { color: var(--bb-accent); font-weight: 600; font-size: 14px; }
 .VPDocFooter .pager-link .desc  { color: #71717a; }
 
 /* --- Footer ----------------------------------------------- */
 
-.VPFooter {
-  background:  #0f1117 !important;
-  border-top:  1px solid #ffffff14;
-  padding:     24px 32px;
-}
+.VPFooter { background: #0f1117 !important; border-top: 1px solid #ffffff14; padding: 24px 32px; }
 .VPFooter .message,
 .VPFooter .copyright { font-size: 13px; color: #71717a; }
 
 /* ============================================================
-   Home page components — 1:1 match to BusyBuddy landing page
+   Home page components
    ============================================================ */
 
-/* "Documentation" breadcrumb above h1 */
 .bb-breadcrumb {
   font-size:     13px;
   color:         #71717a !important;
@@ -383,7 +328,6 @@ body {
   line-height:   1.4;
 }
 
-/* Hero description paragraph */
 .bb-hero-desc {
   font-size:     0.9375rem;
   color:         #a1a1aa;
@@ -399,8 +343,7 @@ body {
   font-size:     0.875em;
 }
 
-/* Two-tone h1 inside card grid page */
-.vp-doc h1 .bb-accent { color: #5169dd; }
+.vp-doc h1 .bb-accent { color: var(--bb-accent); }
 
 /* ---- Card grid ---- */
 
@@ -416,24 +359,20 @@ body {
   flex-direction:  column;
   gap:             10px;
   padding:         20px;
-  background:      #ffffff08;   /* bg-surface */
+  background:      #ffffff08;
   border:          1px solid #ffffff14;
-  border-radius:   16px;         /* radius-card */
+  border-radius:   16px;
   text-decoration: none !important;
   transition:      background 0.15s, border-color 0.15s;
-  box-shadow:      0 4px 24px rgba(0, 0, 0, 0.2);  /* shadow-card */
+  box-shadow:      0 4px 24px rgba(0, 0, 0, 0.2);
   cursor:          pointer;
 }
-.bb-card:hover {
-  background:   #ffffff0f;  /* hover:bg-surface-hover */
-  border-color: #ffffff26;  /* hover:border-surface-border-hover */
-}
+.bb-card:hover { background: #ffffff0f; border-color: #ffffff26; }
 
-/* Icon badge — matches widget icon colored squares */
 .bb-card-icon {
   width:           40px;
   height:          40px;
-  border-radius:   8px;   /* radius-lg */
+  border-radius:   8px;
   display:         flex;
   align-items:     center;
   justify-content: center;
@@ -441,30 +380,17 @@ body {
   flex-shrink:     0;
 }
 
-/* Color variants matching BusyBuddy's status/brand colors */
-.bb-icon-blue   { background: #5169dd1a; color: #5169dd; }
+.bb-icon-blue   { background: var(--bb-accent-soft); color: var(--bb-accent); }
 .bb-icon-green  { background: #34c7591a; color: #34c759; }
 .bb-icon-orange { background: #f59e0b1a; color: #f59e0b; }
 .bb-icon-red    { background: #ef44441a; color: #ef4444; }
 .bb-icon-purple { background: #a855f71a; color: #a855f7; }
 .bb-icon-cyan   { background: #06b6d41a; color: #06b6d4; }
 
-.bb-card-title {
-  font-size:   15px;
-  font-weight: 700;
-  color:       #ffffff;
-  line-height: 1.3;
-  margin:      0;
-}
+.bb-card-title { font-size: 15px; font-weight: 700; color: #ffffff; line-height: 1.3; margin: 0; }
+.bb-card-desc  { font-size: 13.5px; color: #a1a1aa; line-height: 1.6; margin: 0; }
 
-.bb-card-desc {
-  font-size:   13.5px;
-  color:       #a1a1aa;  /* text-content-secondary */
-  line-height: 1.6;
-  margin:      0;
-}
-
-/* ---- Quick start section ---- */
+/* ---- Quick start card ---- */
 
 .bb-quick-start {
   background:    #ffffff08;
@@ -475,54 +401,40 @@ body {
   box-shadow:    0 4px 24px rgba(0, 0, 0, 0.2);
 }
 .bb-quick-start h2 {
-  font-size:     1.25rem !important;
-  font-weight:   700 !important;
-  color:         #ffffff !important;
-  border-bottom: none !important;
-  margin-top:    0 !important;
-  margin-bottom: 8px !important;
+  font-size:      1.25rem !important;
+  font-weight:    700 !important;
+  color:          #ffffff !important;
+  border-bottom:  none !important;
+  margin-top:     0 !important;
+  margin-bottom:  8px !important;
   padding-bottom: 0 !important;
 }
-.bb-quick-start p {
-  font-size:     14px;
-  color:         #a1a1aa;
-  margin-bottom: 20px;
-  line-height:   1.65;
-}
-.bb-quick-start code {
-  background:    #ffffff14 !important;
-  color:         #a1a1aa !important;
-  border-radius: 4px;
-  padding:       2px 6px;
-}
+.bb-quick-start p    { font-size: 14px; color: #a1a1aa; margin-bottom: 20px; line-height: 1.65; }
+.bb-quick-start code { background: #ffffff14 !important; color: #a1a1aa !important; border-radius: 4px; padding: 2px 6px; }
 
-/* CTA button — matches BusyBuddy's blue "Get Started →" */
+/* CTA button */
 .bb-btn {
   display:         inline-flex;
   align-items:     center;
   gap:             6px;
-  background:      #5169dd;        /* bg-brand */
+  background:      var(--bb-accent);
   color:           #ffffff !important;
   text-decoration: none !important;
   font-size:       14px;
   font-weight:     600;
   padding:         8px 18px;
-  border-radius:   8px;            /* radius-button */
+  border-radius:   8px;
   transition:      background 0.15s;
-  box-shadow:      0 4px 16px rgba(81, 105, 221, 0.25);  /* shadow-button */
+  box-shadow:      0 4px 16px var(--bb-accent-shadow);
 }
-.bb-btn:hover { background: #4257c4; }  /* hover:bg-brand-hover */
+.bb-btn:hover { background: var(--bb-accent-hover); }
 
 /* --- Responsive -------------------------------------------- */
 
 @media (max-width: 768px) {
-  .bb-card-grid {
-    grid-template-columns: 1fr;
-  }
+  .bb-card-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
-  .VPDoc .content-container {
-    padding: 28px 20px 48px !important;
-  }
+  .VPDoc .content-container { padding: 28px 20px 48px !important; }
 }

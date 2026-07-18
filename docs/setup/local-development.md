@@ -1,0 +1,67 @@
+# Local Development
+
+Run the generation scripts and preview the docs site locally without touching GitHub Actions.
+
+## Install dependencies
+
+```sh
+npm install
+```
+
+## Generate docs
+
+Both generators accept an `--engine` flag. The default is `deterministic`.
+
+```sh
+# Codebase overview — no API key needed
+npm run generate:overview -- --engine=deterministic
+
+# Codebase overview — LLM (requires ANTHROPIC_API_KEY)
+ANTHROPIC_API_KEY=sk-ant-... npm run generate:overview -- --engine=llm
+
+# Changelog — deterministic
+npm run generate:changelog -- --engine=deterministic
+
+# Changelog — LLM
+ANTHROPIC_API_KEY=sk-ant-... npm run generate:changelog -- --engine=llm
+```
+
+Or use the unified generator (runs both in one call):
+
+```sh
+npm run generate:site -- --engine=deterministic
+npm run generate:site -- --engine=llm
+```
+
+## Preview the site
+
+```sh
+npm run dev
+```
+
+Opens the VitePress dev server at `http://localhost:5173/auto-docs-site/` (or the next available port). Changes to `.md` files and the theme hot-reload automatically.
+
+## Build a static copy
+
+```sh
+npm run build
+```
+
+Outputs to `docs/.vitepress/dist/`. Serve it locally to verify the production build matches the dev preview:
+
+```sh
+npm run preview
+```
+
+## Resetting the changelog state
+
+The changelog generator is incremental — it only processes commits since `scripts/.last-sha.json`. To regenerate from the full git history:
+
+```sh
+rm scripts/.last-sha.json
+npm run generate:changelog
+```
+
+## Pointing the generators at a different repo
+
+The scripts resolve the repo root from their own location (`dirname(import.meta.url) + '/..'`). To generate docs for a different codebase, copy the `scripts/` directory and `package.json` into that repo and run from there. The generators will scan the repo they live in.
