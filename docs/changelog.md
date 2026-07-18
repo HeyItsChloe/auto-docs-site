@@ -1,9 +1,10 @@
 # Changelog
 
-## 2026-07-18 — 4 commits (`d9ca86e`)
+## 2026-07-18 — 5 commits (`5eb9b6a`)
 
 _engine: `deterministic`_
 
+- fix: restore page content, clean up deterministic engine, fix README (HeyItsChloe, 2026-07-17, `5eb9b6a`)
 - Merge branch 'main' of https://github.com/HeyItsChloe/auto-docs-site (HeyItsChloe, 2026-07-17, `d9ca86e`)
 - docs: update README to reflect two-engine model and deterministic scope (HeyItsChloe, 2026-07-17, `ace0c9e`)
 - fix: both engines now regenerate all pages on every run (HeyItsChloe, 2026-07-17, `3d2d022`)
