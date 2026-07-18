@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-18 — 2 commits (`953fa01`)
+
+_engine: `deterministic`_
+
+- feat: full site structure + unified LLM generator (HeyItsChloe, 2026-07-17, `953fa01`)
+- docs: regenerate overview & changelog [skip ci] (docs-site-bot, 2026-07-18, `02b73fc`)
+
 ## 2026-07-18 — 3 commits (`0b517f9`)
 
 _engine: `deterministic`_
