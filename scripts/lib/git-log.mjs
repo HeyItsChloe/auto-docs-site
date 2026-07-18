@@ -5,6 +5,16 @@ export function currentSha(root) {
 }
 
 export function commitsSince(root, sinceSha) {
+  // If sinceSha was rewritten by a rebase it won't exist — fall back to full history
+  if (sinceSha) {
+    try {
+      execFileSync('git', ['cat-file', '-e', sinceSha], { cwd: root })
+    } catch {
+      console.warn(`commitsSince: SHA ${sinceSha.slice(0, 7)} not found (rebase?), using full history`)
+      sinceSha = null
+    }
+  }
+
   const range = sinceSha ? `${sinceSha}..HEAD` : 'HEAD'
   const format = '%H%x1f%ad%x1f%an%x1f%s'
   const out = execFileSync(
