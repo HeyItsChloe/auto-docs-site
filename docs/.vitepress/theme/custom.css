@@ -1,73 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 /* ============================================================
-   BusyBuddy Design System — VitePress port
-   Reference: BusyBuddy_v2/web/frontend/pages/DashboardHome.css
+   Design tokens copied 1:1 from BusyBuddy_v2 CSS bundle
+   Source: 11thandorange.github.io/BusyBuddy_v2/assets/index-DfXY5M_C.css
    ============================================================ */
 
-/* --- Variables -------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
-:root {
-  --vp-c-brand-1: #007aff;
-  --vp-c-brand-2: #007aff;
-  --vp-c-brand-3: #0062cc;
-  --vp-c-brand-soft: rgba(0, 122, 255, 0.12);
+/* --- Token overrides — applied in both root and .dark
+       so they win regardless of VitePress SSR hydration order --- */
 
-  /* Page background = BusyBuddy .dashboard-home background */
-  --vp-c-bg: #f2f2f7;
-  /* Card surfaces = BusyBuddy .widgets-container / .history-container */
-  --vp-c-bg-alt: #ffffff;
-  --vp-c-bg-elv: #ffffff;
-  --vp-c-bg-soft: #e5e5ea;
-
-  /* iOS label colors */
-  --vp-c-text-1: #1c1c1e;
-  --vp-c-text-2: #636366;
-  --vp-c-text-3: #8e8e93;
-  --vp-c-divider: #e5e5ea;
-  --vp-c-gutter: #e5e5ea;
-
-  --vp-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --vp-font-family-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-
-  /* Nav height matches BusyBuddy header: calc(100vh - 57px) */
-  --vp-nav-height: 57px;
-}
-
+:root,
 .dark {
-  --vp-c-bg: #1c1c1e;
-  --vp-c-bg-alt: #2c2c2e;
-  --vp-c-bg-elv: #2c2c2e;
-  --vp-c-bg-soft: #3a3a3c;
-  --vp-c-text-1: #f2f2f7;
-  --vp-c-text-2: #aeaeb2;
-  --vp-c-text-3: #636366;
-  --vp-c-divider: #3a3a3c;
+  /* Brand — bg-brand: #5169dd */
+  --vp-c-brand-1:    #5169dd;
+  --vp-c-brand-2:    #5169dd;
+  --vp-c-brand-3:    #4257c4;   /* hover:bg-brand-hover */
+  --vp-c-brand-soft: #5169dd1a; /* bg-brand-muted */
+
+  /* Backgrounds — bg-background: #0f1117 */
+  --vp-c-bg:      #0f1117;
+  --vp-c-bg-alt:  #0f1117;
+  --vp-c-bg-elv:  #1a1d27;     /* bg-background-elevated */
+  --vp-c-bg-soft: #ffffff08;   /* bg-surface */
+
+  /* Text */
+  --vp-c-text-1: #ffffff;   /* text-content */
+  --vp-c-text-2: #a1a1aa;   /* text-content-secondary */
+  --vp-c-text-3: #71717a;   /* text-content-muted */
+
+  /* Borders */
+  --vp-c-divider: #ffffff14; /* border-surface-border */
+  --vp-c-gutter:  #0f1117;
+
+  /* Typography */
+  --vp-font-family-base: Inter, system-ui, -apple-system, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Layout */
+  --vp-nav-height:    64px;    /* h-16 = 4rem */
+  --vp-sidebar-width: 256px;   /* w-64 = 16rem */
 }
 
 /* --- Base -------------------------------------------------- */
 
+html { scroll-behavior: smooth; }
+
 html,
 body {
-  background-color: var(--vp-c-bg) !important;
-  font-family: var(--vp-font-family-base);
-  color: var(--vp-c-text-1);
+  background: #0f1117 !important;
+  color: #ffffff;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ============================================================
-   NAV — matches BusyBuddy's app header (57px, white, subtle border)
-   ============================================================ */
+::selection { background: #5169dd4d; }
+
+::-webkit-scrollbar              { width: 10px; height: 10px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        { background: #ffffff1a; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover  { background: #ffffff2e; }
+
+/* --- Nav --------------------------------------------------- */
 
 .VPNav {
-  background: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(15, 17, 23, 0.95) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--vp-c-divider) !important;
+  border-bottom: 1px solid #ffffff14 !important;
   height: var(--vp-nav-height) !important;
-}
-
-.dark .VPNav {
-  background: rgba(28, 28, 30, 0.9) !important;
 }
 
 .VPNavBar {
@@ -75,534 +75,454 @@ body {
   height: var(--vp-nav-height) !important;
 }
 
-/* Site title */
-.VPNavBarTitle .title {
-  font-weight: 700;
+/* Two-tone wordmark component */
+.bb-nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
   font-size: 15px;
-  letter-spacing: -0.3px;
-  color: var(--vp-c-text-1) !important;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+}
+.bb-logo-accent { color: #5169dd; }
+.bb-logo-main   { color: #ffffff; }
+.bb-logo-label  {
+  color: #a1a1aa;
+  font-weight: 500;
+  font-size: 14px;
+  margin-left: 8px;
 }
 
-/* Nav links — pill tabs matching BusyBuddy's Header.jsx ToggleButtons */
+/* Nav menu — flat links, no pill container */
 .VPNavBarMenu {
-  background: #f2f2f7;
-  border-radius: 12px;
-  padding: 4px;
-  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.10);
-  display: flex;
-  gap: 2px;
+  background:    none !important;
+  border-radius: 0    !important;
+  box-shadow:    none !important;
+  padding:       0    !important;
+  gap: 2px !important;
   align-items: center;
 }
 
-.VPNavBarMenu .VPNavBarMenuLink,
-.VPNavBarMenu .VPNavBarMenuGroup > .button {
-  font-size: 13px;
-  font-weight: 600;
-  color: #4a4a4a;
-  padding: 6px 16px;
-  border-radius: 10px;
+.VPNavBarMenuLink {
+  font-size:   14px;
+  font-weight: 500;
+  color: #a1a1aa !important;
+  padding: 5px 12px !important;
+  border-radius: 6px;
   transition: background 0.15s, color 0.15s;
   text-decoration: none;
-  display: inline-flex;
+}
+.VPNavBarMenuLink:hover  { color: #fff !important; background: #ffffff0f; }
+.VPNavBarMenuLink.active { color: #fff !important; background: none !important; font-weight: 600; }
+
+/* GitHub social link → outlined button matching BusyBuddy */
+.VPSocialLinks {
+  padding-left: 12px;
+}
+.VPSocialLink {
+  border: 1px solid #ffffff26 !important;
+  border-radius: 6px !important;
+  padding: 5px 10px !important;
+  width: auto !important;
+  height: 32px !important;
+  display: flex;
   align-items: center;
-  height: 36px;
+  transition: background 0.15s, border-color 0.15s;
 }
-
-.VPNavBarMenu .VPNavBarMenuLink:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: #1c1c1e;
+.VPSocialLink:hover {
+  background: #ffffff0f !important;
+  border-color: #ffffff40 !important;
 }
+.VPSocialLinkIcon { width: 16px; height: 16px; color: #ffffff !important; fill: #ffffff !important; }
 
-.VPNavBarMenu .VPNavBarMenuLink.active {
-  background: #1c1c1e;
-  color: #ffffff !important;
-}
+/* Hide dark mode toggle — BusyBuddy is always dark */
+.VPNavBarAppearance { display: none !important; }
 
-.dark .VPNavBarMenu {
-  background: #3a3a3c;
-  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.30);
-}
-
-.dark .VPNavBarMenu .VPNavBarMenuLink.active {
-  background: #f2f2f7;
-  color: #1c1c1e !important;
-}
-
-/* ============================================================
-   LAYOUT BACKGROUND — #f2f2f7 fills the gap between panels
-   ============================================================ */
-
-.VPLayout,
-.Layout {
-  background-color: var(--vp-c-bg) !important;
-}
-
-/* ============================================================
-   SIDEBAR — styled as BusyBuddy's left "widgets-container" card
-   .widgets-container: background #fff; border-radius 20px;
-   padding 24px; box-shadow 0 2px 8px rgba(0,0,0,.08)
-   ============================================================ */
+/* --- Sidebar ----------------------------------------------- */
 
 .VPSidebar {
-  background-color: #ffffff !important;
-  border-right: none !important;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+  background-color: #0f1117 !important;
+  border-right: 1px solid #ffffff14 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: var(--vp-sidebar-width) !important;
 }
 
-.dark .VPSidebar {
-  background-color: #2c2c2e !important;
-}
+.VPSidebarNav { padding: 24px 0 40px; }
 
-/* Inner sidebar padding */
-.VPSidebar .nav {
-  padding: 16px 0;
+/* Section label — "GETTING STARTED" */
+.VPSidebarItem.level-0 > .item {
+  padding: 0 20px;
+  margin-bottom: 4px;
 }
-
-/* Section title — matches .section-title: 17px 600 #1c1c1e */
 .VPSidebarItem.level-0 > .item .text {
   font-size: 11px;
   font-weight: 600;
-  color: var(--vp-c-text-3);
+  color: #71717a !important;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  padding: 0 16px;
+  letter-spacing: 0.08em;
 }
 
-/* Nav links — matches .history-text: 14px 500 #1c1c1e */
-.VPSidebarItem .link .text {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--vp-c-text-1);
-}
-
+/* Links */
 .VPSidebarItem .link {
-  padding: 6px 16px;
-  border-radius: 10px;
-  margin: 0 8px;
+  padding: 6px 20px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
   transition: background 0.15s;
 }
+.VPSidebarItem .link:hover  { background: #ffffff0f; }
+.VPSidebarItem .link .text  { font-size: 14px; font-weight: 400; color: #a1a1aa; transition: color 0.15s; }
+.VPSidebarItem .link:hover .text  { color: #ffffff; }
+.VPSidebarItem .link.active       { background: none; }
+.VPSidebarItem .link.active .text { color: #ffffff; font-weight: 500; }
 
-.VPSidebarItem .link:hover {
-  background: rgba(0, 122, 255, 0.08);
+/* --- Content area ------------------------------------------ */
+
+/* Hide right-side TOC — BusyBuddy doesn't show it */
+.VPDocAside,
+.VPDocAsideOutline { display: none !important; }
+
+/* Expand content to fill without aside */
+.VPDoc.has-aside .content-container { max-width: 760px !important; }
+
+/* Remove any card/white-box wrapper that our last CSS added */
+.VPDoc .content {
+  background:    transparent !important;
+  box-shadow:    none !important;
+  border-radius: 0 !important;
+  margin:        0 !important;
+  padding:       0 !important;
+  min-height:    0 !important;
+  overflow:      visible !important;
 }
 
-.VPSidebarItem .link:hover .text {
-  color: var(--vp-c-brand-1);
+.VPDoc .content-container {
+  padding:   48px 40px 80px !important;
+  max-width: 760px !important;
 }
 
-.VPSidebarItem .link.active {
-  background: rgba(0, 122, 255, 0.10);
-}
+/* --- Doc typography ---------------------------------------- */
 
-.VPSidebarItem .link.active .text {
-  color: var(--vp-c-brand-1);
-  font-weight: 600;
-}
-
-/* ============================================================
-   CONTENT CARD — styled as BusyBuddy's "history-container" card
-   .history-container: background #fff; border-radius 20px;
-   padding 20px; box-shadow 0 2px 8px rgba(0,0,0,.08)
-   ============================================================ */
-
-@media (min-width: 960px) {
-  .VPDoc .content {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 16px 16px 16px 0;
-    overflow: hidden;
-    min-height: calc(100vh - var(--vp-nav-height) - 32px);
-  }
-
-  .dark .VPDoc .content {
-    background: #2c2c2e;
-  }
-
-  .VPDoc .content-container {
-    padding: 28px 40px 40px;
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 959px) {
-  .VPDoc .content {
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 12px;
-    overflow: hidden;
-  }
-
-  .dark .VPDoc .content {
-    background: #2c2c2e;
-  }
-
-  .VPDoc .content-container {
-    padding: 24px 28px;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 639px) {
-  .VPDoc .content {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    margin: 8px;
-    overflow: hidden;
-  }
-
-  .dark .VPDoc .content {
-    background: #2c2c2e;
-  }
-
-  .VPDoc .content-container {
-    padding: 20px;
-    max-width: 100%;
-  }
-}
-
-/* ============================================================
-   DOC TYPOGRAPHY — matches BusyBuddy text styles
-   ============================================================ */
-
-/* h1 — large section heading */
+/* h1 — text-heading-lg: 2.25rem / 700 / 1.25 */
 .vp-doc h1 {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-  letter-spacing: -0.3px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
-  margin-bottom: 20px;
+  font-size:     2.25rem;
+  font-weight:   700;
+  line-height:   1.25;
+  color:         #ffffff;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top:    0;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
 }
 
-/* h2 — matches .section-title / .history-title: 17px 600 */
+/* h2 — text-heading-sm: 1.25rem / 700 / 1.4 */
 .vp-doc h2 {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  letter-spacing: 0;
-  border-top: none;
-  padding-top: 0;
-  margin-top: 32px;
+  font-size:     1.25rem;
+  font-weight:   700;
+  line-height:   1.4;
+  color:         #ffffff;
+  border-top:    none;
+  border-bottom: 1px solid #ffffff14;
+  padding-top:   0;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--vp-c-divider);
+  margin-top:    40px;
+  margin-bottom: 16px;
 }
 
-/* h3 — sub-section */
+/* h3 */
 .vp-doc h3 {
-  font-size: 15px;
+  font-size:   1rem;
   font-weight: 600;
-  color: var(--vp-c-text-1);
-  margin-top: 24px;
+  color:       #ffffff;
+  margin-top:  28px;
+  margin-bottom: 8px;
 }
 
-/* Body text — matches .history-text / .widget-desc */
+/* Paragraphs — prose-body: color #a1a1aa, line-height 1.7 */
 .vp-doc p {
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--vp-c-text-2);
+  font-size:   0.9375rem;
+  line-height: 1.7;
+  color:       #a1a1aa;
+  margin-top:  0;
+  margin-bottom: 16px;
 }
 
 /* Links */
 .vp-doc a {
-  color: var(--vp-c-brand-1);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.vp-doc a:hover {
-  color: var(--vp-c-brand-3);
+  color: #5169dd;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
+.vp-doc a:hover { color: #7b8ff0; }
 
 /* Lists */
+.vp-doc ul,
+.vp-doc ol { padding-left: 24px; margin-bottom: 16px; }
 .vp-doc li {
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-  line-height: 1.65;
-}
-
-/* Code blocks — rounded like BusyBuddy's cards */
-.vp-doc div[class*='language-'] {
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  background: #f2f2f7 !important;
-}
-
-.dark .vp-doc div[class*='language-'] {
-  background: #1c1c1e !important;
-  border-color: #3a3a3c;
-}
-
-/* Inline code — blue pill matching BusyBuddy's .status-indicator.active */
-.vp-doc :not(pre) > code {
-  background: rgba(0, 122, 255, 0.10);
-  color: #007aff;
-  border-radius: 6px;
-  padding: 2px 6px;
-  font-size: 0.875em;
-  font-weight: 500;
-}
-
-/* Blockquote — matches .notification-banner.enable-extension */
-.vp-doc blockquote {
-  background: rgba(0, 122, 255, 0.06);
-  border-left: 3px solid var(--vp-c-brand-1);
-  border-radius: 0 10px 10px 0;
-  padding: 14px 16px;
-  margin: 16px 0;
-}
-
-.vp-doc blockquote p {
-  color: var(--vp-c-text-2);
-  margin: 0;
-}
-
-/* Tables */
-.vp-doc table {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 14px;
-}
-
-.vp-doc th {
-  background: #f2f2f7;
-  font-weight: 600;
-  font-size: 11px;
-  color: var(--vp-c-text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.vp-doc td {
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--vp-c-divider);
-  color: var(--vp-c-text-1);
-}
-
-.vp-doc tr:nth-child(even) td {
-  background: rgba(242, 242, 247, 0.6);
-}
-
-.dark .vp-doc th {
-  background: #3a3a3c;
-}
-
-.dark .vp-doc tr:nth-child(even) td {
-  background: rgba(58, 58, 60, 0.4);
-}
-
-/* Horizontal rule */
-.vp-doc hr {
-  border-color: var(--vp-c-divider);
-  margin: 24px 0;
-}
-
-/* Custom blocks */
-.vp-doc .custom-block {
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-/* ============================================================
-   DOC NAV (prev / next) — styled like .widget-btn
-   ============================================================ */
-
-.VPDocFooter .pager-link {
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.15s;
-}
-
-.VPDocFooter .pager-link:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
-}
-
-.VPDocFooter .pager-link .title {
-  color: var(--vp-c-brand-1);
-  font-weight: 600;
-  font-size: 14px;
-}
-
-/* ============================================================
-   OUTLINE (right TOC) — subtle list styling
-   ============================================================ */
-
-.VPDocAsideOutline .outline-link {
-  font-size: 13px;
-  color: var(--vp-c-text-3);
-  font-weight: 500;
-  transition: color 0.15s;
-}
-
-.VPDocAsideOutline .outline-link:hover,
-.VPDocAsideOutline .outline-link.active {
-  color: var(--vp-c-brand-1);
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-
-.VPFooter {
-  background: var(--vp-c-bg) !important;
-  border-top: 1px solid var(--vp-c-divider);
-}
-
-.VPFooter .message,
-.VPFooter .copyright {
-  font-size: 12px;
-  color: var(--vp-c-text-3);
-}
-
-/* ============================================================
-   HOME PAGE — widget grid + card layout
-   ============================================================ */
-
-.VPHome {
-  padding: 16px !important;
-  background: var(--vp-c-bg) !important;
-}
-
-/* Hero section — card like history-container */
-.VPHero {
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 40px !important;
-  margin-bottom: 16px;
-  border: 3px solid #f2f2f7;
-}
-
-.dark .VPHero {
-  background: #2c2c2e;
-  border-color: #3a3a3c;
-}
-
-.VPHero .name {
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  font-size: 36px !important;
-  color: var(--vp-c-text-1) !important;
-  background: none !important;
-  -webkit-text-fill-color: var(--vp-c-text-1) !important;
-}
-
-.VPHero .text {
-  font-size: 18px !important;
-  color: var(--vp-c-text-2) !important;
-  font-weight: 500;
-}
-
-.VPHero .tagline {
-  color: var(--vp-c-text-3) !important;
-  font-size: 14px !important;
-}
-
-/* Hero buttons — match .widget-btn */
-.VPButton.brand {
-  background: #1c1c1e !important;
-  border-color: #1c1c1e !important;
-  border-radius: 10px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  padding: 10px 20px !important;
-  color: #ffffff !important;
-}
-
-.VPButton.brand:hover {
-  background: #333 !important;
-  border-color: #333 !important;
-}
-
-.VPButton.alt {
-  background: #f2f2f7 !important;
-  border-color: transparent !important;
-  color: #1c1c1e !important;
-  border-radius: 10px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  padding: 10px 20px !important;
-}
-
-.VPButton.alt:hover {
-  background: #e5e5ea !important;
-}
-
-/* Feature cards — match .widget-tile */
-.VPFeatures {
-  background: var(--vp-c-bg);
-  padding: 0 !important;
-}
-
-.VPFeatures .container {
-  padding: 0 !important;
-  margin: 0 !important;
-  max-width: 100% !important;
-}
-
-.VPFeature {
-  background: #ffffff !important;
-  border: 3px solid #f2f2f7 !important;
-  border-radius: 16px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-  padding: 20px !important;
-  text-align: center;
-}
-
-.dark .VPFeature {
-  background: #2c2c2e !important;
-  border-color: #3a3a3c !important;
-}
-
-.VPFeature:hover {
-  border-color: #e5e5ea !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10) !important;
-}
-
-/* Feature icon — matches .widget-icon-large */
-.VPFeature .icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: rgba(0, 122, 255, 0.12);
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 12px;
-  font-size: 24px;
-}
-
-/* Feature title — matches .widget-name */
-.VPFeature .title {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #1c1c1e !important;
+  font-size:   0.9375rem;
+  line-height: 1.7;
+  color:       #a1a1aa;
   margin-bottom: 4px;
 }
 
-.dark .VPFeature .title {
-  color: #f2f2f7 !important;
+/* Inline code */
+.vp-doc :not(pre) > code {
+  background:    #ffffff14;
+  color:         #a1a1aa;
+  border-radius: 4px;
+  padding:       2px 6px;
+  font-size:     0.875em;
+  font-family:   'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Feature details — matches .widget-desc */
-.VPFeature .details {
-  font-size: 12px !important;
-  color: #8e8e93 !important;
-  line-height: 1.5 !important;
+/* Code blocks */
+.vp-doc div[class*='language-'] {
+  background:    #1a1d27 !important;
+  border:        1px solid #ffffff14;
+  border-radius: 8px;
+  overflow:      hidden;
+  box-shadow:    none;
+}
+.vp-doc div[class*='language-'] pre,
+.vp-doc div[class*='language-'] code {
+  background:  transparent !important;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size:   0.875rem;
+  color:       #a1a1aa;
+}
+.vp-doc div[class*='language-'] .lang { color: #71717a; font-size: 12px; }
+
+/* HR */
+.vp-doc hr { border-color: #ffffff14; margin: 32px 0; }
+
+/* Blockquote */
+.vp-doc blockquote {
+  background:    #5169dd1a;
+  border-left:   3px solid #5169dd;
+  border-radius: 0 6px 6px 0;
+  padding:       12px 16px;
+  margin:        16px 0;
+}
+.vp-doc blockquote p { color: #a1a1aa; margin: 0; }
+
+/* Tables */
+.vp-doc table {
+  width:           100%;
+  border-collapse: separate;
+  border-spacing:  0;
+  border:          1px solid #ffffff14;
+  border-radius:   8px;
+  overflow:        hidden;
+  font-size:       14px;
+}
+.vp-doc th {
+  background:    #ffffff08;
+  color:         #ffffff;
+  font-weight:   600;
+  font-size:     13px;
+  padding:       10px 16px;
+  text-align:    left;
+  border-bottom: 1px solid #ffffff14;
+}
+.vp-doc td {
+  padding:       10px 16px;
+  color:         #a1a1aa;
+  border-bottom: 1px solid #ffffff14;
+}
+.vp-doc tr:last-child td { border-bottom: none; }
+
+/* Custom blocks */
+.vp-doc .custom-block          { border-radius: 8px; }
+.vp-doc .custom-block.tip     { background: #5169dd1a; border-color: #5169dd; }
+.vp-doc .custom-block.warning { background: #f59e0b1a; border-color: #f59e0b; }
+.vp-doc .custom-block.danger  { background: #ef44441a; border-color: #ef4444; }
+.vp-doc .custom-block p       { color: #a1a1aa; }
+.vp-doc .custom-block .title  { color: #ffffff; }
+
+/* --- Doc prev/next footer ---------------------------------- */
+
+.VPDocFooter {
+  border-top:  1px solid #ffffff14;
+  margin-top:  40px;
+  padding-top: 24px;
+}
+.VPDocFooter .pager-link {
+  border:        1px solid #ffffff14;
+  border-radius: 8px;
+  background:    #ffffff08;
+  transition:    background 0.15s, border-color 0.15s;
+}
+.VPDocFooter .pager-link:hover {
+  background:    #ffffff0f;
+  border-color:  #ffffff26;
+}
+.VPDocFooter .pager-link .title { color: #5169dd; font-weight: 600; font-size: 14px; }
+.VPDocFooter .pager-link .desc  { color: #71717a; }
+
+/* --- Footer ----------------------------------------------- */
+
+.VPFooter {
+  background:  #0f1117 !important;
+  border-top:  1px solid #ffffff14;
+  padding:     24px 32px;
+}
+.VPFooter .message,
+.VPFooter .copyright { font-size: 13px; color: #71717a; }
+
+/* ============================================================
+   Home page components — 1:1 match to BusyBuddy landing page
+   ============================================================ */
+
+/* "Documentation" breadcrumb above h1 */
+.bb-breadcrumb {
+  font-size:     13px;
+  color:         #71717a !important;
+  margin-bottom: 8px !important;
+  line-height:   1.4;
+}
+
+/* Hero description paragraph */
+.bb-hero-desc {
+  font-size:     0.9375rem;
+  color:         #a1a1aa;
+  line-height:   1.7;
+  margin-bottom: 32px;
+  max-width:     640px;
+}
+.bb-hero-desc code {
+  background:    #ffffff14 !important;
+  color:         #a1a1aa !important;
+  border-radius: 4px;
+  padding:       2px 6px;
+  font-size:     0.875em;
+}
+
+/* Two-tone h1 inside card grid page */
+.vp-doc h1 .bb-accent { color: #5169dd; }
+
+/* ---- Card grid ---- */
+
+.bb-card-grid {
+  display:               grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:                   16px;
+  margin-bottom:         24px;
+}
+
+.bb-card {
+  display:         flex;
+  flex-direction:  column;
+  gap:             10px;
+  padding:         20px;
+  background:      #ffffff08;   /* bg-surface */
+  border:          1px solid #ffffff14;
+  border-radius:   16px;         /* radius-card */
+  text-decoration: none !important;
+  transition:      background 0.15s, border-color 0.15s;
+  box-shadow:      0 4px 24px rgba(0, 0, 0, 0.2);  /* shadow-card */
+  cursor:          pointer;
+}
+.bb-card:hover {
+  background:   #ffffff0f;  /* hover:bg-surface-hover */
+  border-color: #ffffff26;  /* hover:border-surface-border-hover */
+}
+
+/* Icon badge — matches widget icon colored squares */
+.bb-card-icon {
+  width:           40px;
+  height:          40px;
+  border-radius:   8px;   /* radius-lg */
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       18px;
+  flex-shrink:     0;
+}
+
+/* Color variants matching BusyBuddy's status/brand colors */
+.bb-icon-blue   { background: #5169dd1a; color: #5169dd; }
+.bb-icon-green  { background: #34c7591a; color: #34c759; }
+.bb-icon-orange { background: #f59e0b1a; color: #f59e0b; }
+.bb-icon-red    { background: #ef44441a; color: #ef4444; }
+.bb-icon-purple { background: #a855f71a; color: #a855f7; }
+.bb-icon-cyan   { background: #06b6d41a; color: #06b6d4; }
+
+.bb-card-title {
+  font-size:   15px;
+  font-weight: 700;
+  color:       #ffffff;
+  line-height: 1.3;
+  margin:      0;
+}
+
+.bb-card-desc {
+  font-size:   13.5px;
+  color:       #a1a1aa;  /* text-content-secondary */
+  line-height: 1.6;
+  margin:      0;
+}
+
+/* ---- Quick start section ---- */
+
+.bb-quick-start {
+  background:    #ffffff08;
+  border:        1px solid #ffffff14;
+  border-radius: 16px;
+  padding:       24px;
+  margin-top:    8px;
+  box-shadow:    0 4px 24px rgba(0, 0, 0, 0.2);
+}
+.bb-quick-start h2 {
+  font-size:     1.25rem !important;
+  font-weight:   700 !important;
+  color:         #ffffff !important;
+  border-bottom: none !important;
+  margin-top:    0 !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 0 !important;
+}
+.bb-quick-start p {
+  font-size:     14px;
+  color:         #a1a1aa;
+  margin-bottom: 20px;
+  line-height:   1.65;
+}
+.bb-quick-start code {
+  background:    #ffffff14 !important;
+  color:         #a1a1aa !important;
+  border-radius: 4px;
+  padding:       2px 6px;
+}
+
+/* CTA button — matches BusyBuddy's blue "Get Started →" */
+.bb-btn {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             6px;
+  background:      #5169dd;        /* bg-brand */
+  color:           #ffffff !important;
+  text-decoration: none !important;
+  font-size:       14px;
+  font-weight:     600;
+  padding:         8px 18px;
+  border-radius:   8px;            /* radius-button */
+  transition:      background 0.15s;
+  box-shadow:      0 4px 16px rgba(81, 105, 221, 0.25);  /* shadow-button */
+}
+.bb-btn:hover { background: #4257c4; }  /* hover:bg-brand-hover */
+
+/* --- Responsive -------------------------------------------- */
+
+@media (max-width: 768px) {
+  .bb-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .VPDoc .content-container {
+    padding: 28px 20px 48px !important;
+  }
 }
