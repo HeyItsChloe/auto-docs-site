@@ -1,6 +1,6 @@
 # Codebase Overview
 
-_Generated 2026-07-18T01:02:52.752Z · engine: `deterministic` · commit `fe1c7da`_
+_Generated 2026-07-18T01:34:03.259Z · engine: `deterministic` · commit `0b517f9`_
 
 ## File tree
 
@@ -12,13 +12,15 @@ _Generated 2026-07-18T01:02:52.752Z · engine: `deterministic` · commit `fe1c7d
 ├── README.md (3.0KB)
 ├── docs/
 │   ├── .vitepress/
-│   │   ├── config.ts (832B)
+│   │   ├── config.ts (906B)
 │   │   └── theme/
-│   │       ├── custom.css (13.7KB)
-│   │       └── index.ts (94B)
-│   ├── changelog.md (1.1KB)
+│   │       ├── Layout.vue (254B)
+│   │       ├── NavLogo.vue (213B)
+│   │       ├── custom.css (14.0KB)
+│   │       └── index.ts (154B)
+│   ├── changelog.md (1.4KB)
 │   ├── codebase-overview.md (1.1KB)
-│   └── index.md (1.6KB)
+│   └── index.md (1.3KB)
 ├── package-lock.json (86.0KB)
 ├── package.json (404B)
 └── scripts/
@@ -31,7 +33,8 @@ _Generated 2026-07-18T01:02:52.752Z · engine: `deterministic` · commit `fe1c7d
         └── repo-scan.mjs (2.8KB)
 ```
 
-## Local import graph (2 files with local imports)
+## Local import graph (3 files with local imports)
 
+- `docs/.vitepress/theme/index.ts` → `./Layout.vue`
 - `scripts/generate-changelog.mjs` → `./lib/git-log.mjs`, `./lib/claude.mjs`
 - `scripts/generate-overview.mjs` → `./lib/repo-scan.mjs`, `./lib/git-log.mjs`, `./lib/claude.mjs`

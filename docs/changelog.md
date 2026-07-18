@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-18 — 3 commits (`0b517f9`)
+
+_engine: `deterministic`_
+
+- Merge branch 'main' of https://github.com/HeyItsChloe/auto-docs-site (HeyItsChloe, 2026-07-17, `0b517f9`)
+- styles (HeyItsChloe, 2026-07-17, `d3df424`)
+- docs: regenerate overview & changelog [skip ci] (docs-site-bot, 2026-07-18, `e0fafa4`)
+
 ## 2026-07-18 — 3 commits (`fe1c7da`)
 
 _engine: `deterministic`_
