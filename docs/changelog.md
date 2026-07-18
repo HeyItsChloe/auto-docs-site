@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-18 — 2 commits (`30b7d38`)
+
+_engine: `deterministic`_
+
+- Fix VitePress base path for GitHub Pages project subpath (Claude, 2026-07-18, `30b7d38`)
+- docs: regenerate overview & changelog [skip ci] (docs-site-bot, 2026-07-18, `6d9d84f`)
+
 ## 2026-07-18 — 1 commit (`fd1be90`)
 
 _engine: `deterministic`_

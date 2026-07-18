@@ -1,6 +1,6 @@
 # Codebase Overview
 
-_Generated 2026-07-18T00:27:11.962Z · engine: `deterministic` · commit `fd1be90`_
+_Generated 2026-07-18T00:33:29.532Z · engine: `deterministic` · commit `30b7d38`_
 
 ## File tree
 
@@ -12,11 +12,11 @@ _Generated 2026-07-18T00:27:11.962Z · engine: `deterministic` · commit `fd1be9
 ├── README.md (3.0KB)
 ├── docs/
 │   ├── .vitepress/
-│   │   ├── config.ts (804B)
+│   │   ├── config.ts (832B)
 │   │   └── theme/
 │   │       ├── custom.css (868B)
 │   │       └── index.ts (94B)
-│   ├── changelog.md (347B)
+│   ├── changelog.md (504B)
 │   ├── codebase-overview.md (1.1KB)
 │   └── index.md (1.6KB)
 ├── package-lock.json (86.0KB)
